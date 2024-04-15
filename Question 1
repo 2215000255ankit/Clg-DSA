@@ -1,0 +1,36 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        while (true) {
+            int H = scanner.nextInt();
+            if (H == 0) break;
+            
+            int[] values = new int[(1 << H) - 1];
+            for (int i = 0; i < values.length; i++) {
+                values[i] = scanner.nextInt();
+            }
+            
+            int result = calculateP1(values, 0);
+            System.out.println(result);
+        }
+        
+        scanner.close();
+    }
+    
+    public static int calculateP1(int[] values, int index) {
+        if (index >= values.length) return 0;
+        if (2 * index + 1 >= values.length) return values[index];
+        
+        int leftChildIndex = 2 * index + 1;
+        int rightChildIndex = 2 * index + 2;
+        
+        int maxChildValue = Math.max(values[leftChildIndex], values[rightChildIndex]);
+        
+        return Math.max(values[index] * maxChildValue, 
+                        Math.max(values[index] * calculateP1(values, leftChildIndex), 
+                                 values[index] * calculateP1(values, rightChildIndex)));
+    }
+}
